@@ -7,6 +7,7 @@
 	import { KeyboardKey, MessageRole } from '$lib/enums';
 	import { chatStore } from '$lib/stores/chat.svelte';
 	import { processFilesToChatUploaded } from '$lib/utils/browser-only';
+	import { m } from '$lib/paraglide/messages.js';
 
 	const editCtx = getMessageEditContext();
 
@@ -101,7 +102,7 @@
 		value={editCtx.editedContent}
 		attachments={editCtx.editedExtras}
 		bind:uploadedFiles={editCtx.editedUploadedFiles}
-		placeholder="Edit your message..."
+		placeholder={m.chat_edit_message_placeholder()}
 		showMcpPromptButton
 		showAddButton={editCtx.messageRole === MessageRole.USER}
 		showModelSelector={editCtx.messageRole === MessageRole.USER}
@@ -119,7 +120,7 @@
 			<Switch id="save-only-switch" bind:checked={saveWithoutRegenerate} class="scale-75" />
 
 			<label for="save-only-switch" class="cursor-pointer text-xs text-muted-foreground">
-				Update without re-sending
+				{m.chat_edit_update_no_resend()}
 			</label>
 		</div>
 	{:else if isAssistantMessage}
@@ -143,10 +144,10 @@
 
 <DialogConfirmation
 	bind:open={showDiscardDialog}
-	title="Discard changes?"
-	description="You have unsaved changes. Are you sure you want to discard them?"
-	confirmText="Discard"
-	cancelText="Keep editing"
+	title={m.chat_edit_discard_title()}
+	description={m.chat_edit_discard_description()}
+	confirmText={m.chat_edit_discard_confirm()}
+	cancelText={m.chat_edit_discard_cancel()}
 	variant="destructive"
 	icon={AlertTriangle}
 	onConfirm={editCtx.cancel}

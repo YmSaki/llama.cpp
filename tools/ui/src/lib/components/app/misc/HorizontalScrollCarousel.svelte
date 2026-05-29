@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import type { Snippet } from 'svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		class?: string;
@@ -69,7 +70,7 @@
 			? 'opacity-100'
 			: 'pointer-events-none opacity-0'}"
 		onclick={scrollLeft}
-		aria-label="Scroll left"
+		aria-label={m.sr_scroll_left()}
 	>
 		<ChevronLeft class="h-4 w-4" />
 	</button>
@@ -87,7 +88,7 @@
 			? 'opacity-100'
 			: 'pointer-events-none opacity-0'}"
 		onclick={scrollRight}
-		aria-label="Scroll right"
+		aria-label={m.sr_scroll_right()}
 	>
 		<ChevronRight class="h-4 w-4" />
 	</button>

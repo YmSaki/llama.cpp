@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Dialog as DialogPrimitive } from 'bits-ui';
 	import XIcon from '@lucide/svelte/icons/x';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		open: boolean;
@@ -44,11 +45,11 @@
 
 			<DialogPrimitive.Close
 				class="code-preview-close absolute top-4 right-4 border-none bg-transparent text-white opacity-70 mix-blend-difference transition-opacity hover:opacity-100 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-8"
-				aria-label="Close preview"
+				aria-label={m.sr_close_preview()}
 			>
 				<XIcon />
 
-				<span class="sr-only">Close preview</span>
+				<span class="sr-only">{m.sr_close_preview()}</span>
 			</DialogPrimitive.Close>
 		</DialogPrimitive.Content>
 	</DialogPrimitive.Portal>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Settings, ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import { onMount, tick } from 'svelte';
+	import { m } from '$lib/paraglide/messages.js';
 	import type { SettingsSection, SettingsSectionTitle } from '$lib/constants';
 	import { useScrollCarousel } from '$lib/hooks/use-scroll-carousel.svelte';
 
@@ -34,7 +35,7 @@
 	<div class="flex items-center gap-2 px-4 pt-4 pb-2 md:pt-6">
 		<Settings class="h-5 w-5 md:h-6 md:w-6" />
 
-		<h1 class="text-xl font-semibold md:text-2xl">Settings</h1>
+		<h1 class="text-xl font-semibold md:text-2xl">{m.settings_title()}</h1>
 	</div>
 
 	<div class="border-b border-border/30 py-2">
@@ -44,7 +45,7 @@
 					? 'opacity-100'
 					: 'pointer-events-none opacity-0'}"
 				onclick={carousel.scrollLeft}
-				aria-label="Scroll left"
+				aria-label={m.settings_scroll_left()}
 			>
 				<ChevronLeft class="h-4 w-4" />
 			</button>
@@ -70,7 +71,7 @@
 								}}
 							>
 								<section.icon class="h-4 w-4 flex-shrink-0" />
-								<span>{section.title}</span>
+								<span>{section.titleLabel()}</span>
 							</a>
 						{:else}
 							<button
@@ -86,7 +87,7 @@
 								}}
 							>
 								<section.icon class="h-4 w-4 flex-shrink-0" />
-								<span>{section.title}</span>
+								<span>{section.titleLabel()}</span>
 							</button>
 						{/if}
 					{/each}
@@ -98,7 +99,7 @@
 					? 'opacity-100'
 					: 'pointer-events-none opacity-0'}"
 				onclick={carousel.scrollRight}
-				aria-label="Scroll right"
+				aria-label={m.settings_scroll_right()}
 			>
 				<ChevronRight class="h-4 w-4" />
 			</button>

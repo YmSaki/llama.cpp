@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
+	import { m } from '$lib/paraglide/messages.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Card } from '$lib/components/ui/card';
 	import { createAutoScrollController } from '$lib/hooks/use-auto-scroll.svelte';
@@ -80,7 +81,7 @@
 			>
 				<ChevronsUpDownIcon class="h-4 w-4" />
 
-				<span class="sr-only">Toggle content</span>
+				<span class="sr-only">{m.sr_toggle_content()}</span>
 			</div>
 		</Collapsible.Trigger>
 

@@ -40,6 +40,7 @@
 		isAudioRecordingSupported
 	} from '$lib/utils/browser-only';
 	import { onMount } from 'svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		// Data
@@ -72,7 +73,7 @@
 		class: className = '',
 		disabled = false,
 		isLoading = false,
-		placeholder = 'Type a message...',
+		placeholder: _placeholder,
 		showMcpPromptButton = false,
 		showAddButton = true,
 		showModelSelector = true,
@@ -87,6 +88,8 @@
 		onUploadedFilesChange,
 		onValueChange
 	}: Props = $props();
+
+	let placeholder = $derived(_placeholder ?? m.chat_textarea_placeholder());
 
 	// Component References
 	let audioRecorder: AudioRecorder | undefined;

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { m } from '$lib/paraglide/messages.js';
 	import { McpServerForm } from '$lib/components/app/mcp';
 	import { mcpStore } from '$lib/stores/mcp.svelte';
 	import { conversationsStore } from '$lib/stores/conversations.svelte';
@@ -57,7 +58,7 @@
 <Dialog.Root {open} onOpenChange={handleOpenChange}>
 	<Dialog.Content class="sm:max-w-md">
 		<Dialog.Header>
-			<Dialog.Title>Add New Server</Dialog.Title>
+			<Dialog.Title>{m.dialog_mcp_server_add_title()}</Dialog.Title>
 		</Dialog.Header>
 
 		<div class="space-y-4 py-4">
@@ -72,16 +73,16 @@
 		</div>
 
 		<Dialog.Footer>
-			<Button variant="secondary" size="sm" onclick={() => handleOpenChange(false)}>Cancel</Button>
+			<Button variant="secondary" size="sm" onclick={() => handleOpenChange(false)}>{m.dialog_mcp_server_add_cancel()}</Button>
 
 			<Button
 				variant="default"
 				size="sm"
 				onclick={saveNewServer}
 				disabled={!!newServerUrlError}
-				aria-label="Save"
+				aria-label={m.sr_save()}
 			>
-				Add
+				{m.dialog_mcp_server_add_submit()}
 			</Button>
 		</Dialog.Footer>
 	</Dialog.Content>

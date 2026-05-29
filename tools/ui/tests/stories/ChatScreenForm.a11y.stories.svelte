@@ -22,7 +22,7 @@
 		await userEvent.clear(textarea);
 		await userEvent.type(textarea, 'What is the meaning of life?');
 
-		const trigger = await canvas.findByRole('button', { name: ATTACHMENT_TOOLTIP_TEXT });
+		const trigger = await canvas.findByRole('button', { name: ATTACHMENT_TOOLTIP_TEXT() });
 
 		trigger.focus();
 		await expect(trigger).toHaveFocus();
@@ -37,7 +37,7 @@
 	name="AddDropdownFocusesFirstEnabled"
 	args={{ class: 'max-w-[56rem] w-[calc(100vw-2rem)]' }}
 	play={async ({ canvas, userEvent }) => {
-		const trigger = await canvas.findByRole('button', { name: ATTACHMENT_TOOLTIP_TEXT });
+		const trigger = await canvas.findByRole('button', { name: ATTACHMENT_TOOLTIP_TEXT() });
 
 		trigger.focus();
 		await userEvent.keyboard('{Enter}');

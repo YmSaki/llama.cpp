@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Plus, Trash2 } from '@lucide/svelte';
 	import { Input } from '$lib/components/ui/input';
+	import { m } from '$lib/paraglide/messages.js';
 	import {
 		autoResizeTextarea,
 		sanitizeKeyValuePairKey,
@@ -130,7 +131,7 @@
 						type="button"
 						class="mt-1.5 shrink-0 cursor-pointer rounded-md p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
 						onclick={() => removePair(index)}
-						aria-label="Remove item"
+						aria-label={m.sr_remove_item()}
 					>
 						<Trash2 class="h-3.5 w-3.5" />
 					</button>

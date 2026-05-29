@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { AlertTriangle, RefreshCw, Key, CheckCircle, XCircle } from '@lucide/svelte';
+	import { m } from '$lib/paraglide/messages.js';
 	import { goto } from '$app/navigation';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
@@ -135,7 +136,7 @@
 				<AlertTriangle class="h-8 w-8 text-destructive" />
 			</div>
 
-			<h2 class="mb-2 text-xl font-semibold">Server Connection Error</h2>
+			<h2 class="mb-2 text-xl font-semibold">{m.server_error_connection_title()}</h2>
 
 			<p class="mb-4 text-sm text-muted-foreground">
 				{error}
@@ -146,7 +147,7 @@
 			<div in:fly={{ y: 10, duration: 300, delay: 200 }} class="mb-4">
 				<Button onclick={handleShowApiKeyInput} variant="outline" class="w-full">
 					<Key class="h-4 w-4" />
-					Enter API Key
+					{m.server_error_enter_api_key()}
 				</Button>
 			</div>
 		{/if}
@@ -154,12 +155,12 @@
 		{#if showApiKeyInput}
 			<div in:fly={{ y: 10, duration: 300, delay: 200 }} class="mb-4 space-y-3 text-left">
 				<div class="space-y-2">
-					<Label for="api-key-input" class="text-sm font-medium">API Key</Label>
+					<Label for="api-key-input" class="text-sm font-medium">{m.server_error_api_key_label()}</Label>
 
 					<div class="relative">
 						<Input
 							id="api-key-input"
-							placeholder="Enter your API key..."
+							placeholder={m.server_error_api_key_placeholder()}
 							bind:value={apiKeyInput}
 							onkeydown={handleApiKeyKeydown}
 							class="w-full pr-10 {apiKeyState === 'error'
@@ -196,7 +197,7 @@
 					{/if}
 					{#if apiKeyState === 'success'}
 						<p class="text-sm text-green-600" in:fly={{ y: -10, duration: 200 }}>
-							✓ API key validated successfully! Connecting...
+							{m.server_error_api_key_validated()}
 						</p>
 					{/if}
 				</div>
@@ -210,11 +211,11 @@
 					>
 						{#if apiKeyState === 'validating'}
 							<RefreshCw class="h-4 w-4 animate-spin" />
-							Validating...
+							{m.server_error_api_key_validating()}
 						{:else if apiKeyState === 'success'}
-							Success!
+							{m.server_error_api_key_success()}
 						{:else}
-							Save & Retry
+							{m.server_error_save_retry()}
 						{/if}
 					</Button>
 					<Button
@@ -227,7 +228,7 @@
 						class="flex-1"
 						disabled={apiKeyState === 'validating'}
 					>
-						Cancel
+						{m.server_error_cancel()}
 					</Button>
 				</div>
 			</div>
@@ -239,11 +240,11 @@
 					{#if isServerLoading}
 						<RefreshCw class="h-4 w-4 animate-spin" />
 
-						Connecting...
+						{m.server_error_connecting()}
 					{:else}
 						<RefreshCw class="h-4 w-4" />
 
-						Retry Connection
+						{m.server_error_retry()}
 					{/if}
 				</Button>
 			</div>
@@ -253,29 +254,29 @@
 			<div class="mt-4 text-left" in:fly={{ y: 10, duration: 300, delay: 400 }}>
 				<details class="text-sm">
 					<summary class="cursor-pointer text-muted-foreground hover:text-foreground">
-						Troubleshooting
+						{m.server_error_troubleshooting()}
 					</summary>
 
 					<div class="mt-2 space-y-3 text-xs text-muted-foreground">
 						<div class="space-y-2">
-							<p class="mb-4 font-medium">Start the llama-server:</p>
+							<p class="mb-4 font-medium">{m.server_error_start_server()}</p>
 
 							<div class="rounded bg-muted/50 px-2 py-1 font-mono text-xs">
 								<p>llama-server -hf ggml-org/gemma-3-4b-it-GGUF</p>
 							</div>
 
-							<p>or</p>
+							<p>{m.server_error_or()}</p>
 
 							<div class="rounded bg-muted/50 px-2 py-1 font-mono text-xs">
 								<p class="mt-1">llama-server -m locally-stored-model.gguf</p>
 							</div>
 						</div>
 						<ul class="list-disc space-y-1 pl-4">
-							<li>Check that the server is accessible at the correct URL</li>
+							<li>{m.server_error_check_url()}</li>
 
-							<li>Verify your network connection</li>
+							<li>{m.server_error_check_network()}</li>
 
-							<li>Check server logs for any error messages</li>
+							<li>{m.server_error_check_logs()}</li>
 						</ul>
 					</div>
 				</details>

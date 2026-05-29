@@ -4,6 +4,7 @@
 	import { TruncatedText } from '$lib/components/app/misc';
 	import { sanitizeExternalUrl } from '$lib/utils';
 	import type { MCPServerInfo } from '$lib/types';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		displayName?: string;
@@ -58,7 +59,7 @@
 			target="_blank"
 			rel="noopener noreferrer"
 			class="shrink-0 text-muted-foreground hover:text-foreground"
-			aria-label="Open website"
+			aria-label={m.sr_open_website()}
 			onclick={(e) => e.stopPropagation()}
 		>
 			<ExternalLink class="h-3 w-3" />

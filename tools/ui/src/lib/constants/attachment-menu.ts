@@ -7,12 +7,13 @@ import {
 	AttachmentItemVisibleWhen,
 	AttachmentMenuItemId
 } from '$lib/enums';
+import { m } from '$lib/paraglide/messages.js';
 
 export interface AttachmentMenuItem {
 	/** Unique identifier for the item */
 	id: AttachmentMenuItemId;
 	/** Display label */
-	label: string;
+	label: () => string;
 	/** Lucide icon component */
 	icon: Component;
 	/** Extra CSS class applied to the item (e.g. for test selectors) */
@@ -20,7 +21,7 @@ export interface AttachmentMenuItem {
 	/** Whether the item requires a specific modality to be enabled */
 	enabledWhen?: AttachmentItemEnabledWhen;
 	/** Tooltip shown when the item is disabled */
-	disabledTooltip?: string;
+	disabledTooltip?: () => string;
 	/** Callback key on the Props interface to invoke when clicked */
 	action: AttachmentAction;
 	/** Whether the item is only shown when a specific capability is present */
@@ -36,44 +37,44 @@ export interface AttachmentMenuItem {
 export const ATTACHMENT_FILE_ITEMS: AttachmentMenuItem[] = [
 	{
 		id: AttachmentMenuItemId.IMAGES,
-		label: 'Images',
+		label: () => m.attachment_images(),
 		icon: FILE_TYPE_ICONS.image,
 		class: 'images-button',
 		enabledWhen: AttachmentItemEnabledWhen.HAS_VISION_MODALITY,
-		disabledTooltip: 'Image processing requires a vision model',
+		disabledTooltip: () => m.attachment_images_disabled_tooltip(),
 		action: AttachmentAction.FILE_UPLOAD
 	},
 	{
 		id: AttachmentMenuItemId.AUDIO,
-		label: 'Audio Files',
+		label: () => m.attachment_audio_files(),
 		icon: FILE_TYPE_ICONS.audio,
 		class: 'audio-button',
 		enabledWhen: AttachmentItemEnabledWhen.HAS_AUDIO_MODALITY,
-		disabledTooltip: 'Audio files processing requires an audio model',
+		disabledTooltip: () => m.attachment_audio_disabled_tooltip(),
 		action: AttachmentAction.FILE_UPLOAD
 	},
 	{
 		id: AttachmentMenuItemId.VIDEO,
-		label: 'Video Files',
+		label: () => m.attachment_video_files(),
 		icon: FILE_TYPE_ICONS.video,
 		class: 'video-button',
 		enabledWhen: AttachmentItemEnabledWhen.HAS_VIDEO_MODALITY,
-		disabledTooltip: 'Video files processing requires a video model',
+		disabledTooltip: () => m.attachment_video_disabled_tooltip(),
 		action: AttachmentAction.FILE_UPLOAD
 	},
 	{
 		id: AttachmentMenuItemId.TEXT,
-		label: 'Text Files',
+		label: () => m.attachment_text_files(),
 		icon: FILE_TYPE_ICONS.text,
 		enabledWhen: AttachmentItemEnabledWhen.ALWAYS,
 		action: AttachmentAction.FILE_UPLOAD
 	},
 	{
 		id: AttachmentMenuItemId.PDF,
-		label: 'PDF Files',
+		label: () => m.attachment_pdf_files(),
 		icon: FILE_TYPE_ICONS.pdf,
 		enabledWhen: AttachmentItemEnabledWhen.ALWAYS,
-		disabledTooltip: 'PDFs will be converted to text. Image-based PDFs may not work properly.',
+		disabledTooltip: () => m.attachment_pdf_disabled_tooltip(),
 		hasEnabledTooltip: true,
 		action: AttachmentAction.FILE_UPLOAD
 	}
@@ -82,7 +83,7 @@ export const ATTACHMENT_FILE_ITEMS: AttachmentMenuItem[] = [
 export const ATTACHMENT_EXTRA_ITEMS: AttachmentMenuItem[] = [
 	{
 		id: AttachmentMenuItemId.SYSTEM_MESSAGE,
-		label: 'System Message',
+		label: () => m.attachment_system_message(),
 		icon: MessageSquare,
 		enabledWhen: AttachmentItemEnabledWhen.ALWAYS,
 		hasEnabledTooltip: true,
@@ -93,7 +94,7 @@ export const ATTACHMENT_EXTRA_ITEMS: AttachmentMenuItem[] = [
 export const ATTACHMENT_MCP_ITEMS: AttachmentMenuItem[] = [
 	{
 		id: AttachmentMenuItemId.MCP_PROMPT,
-		label: 'MCP Prompt',
+		label: () => m.attachment_mcp_prompt(),
 		icon: Zap,
 		enabledWhen: AttachmentItemEnabledWhen.ALWAYS,
 		action: AttachmentAction.MCP_PROMPT_CLICK,
@@ -101,7 +102,7 @@ export const ATTACHMENT_MCP_ITEMS: AttachmentMenuItem[] = [
 	},
 	{
 		id: AttachmentMenuItemId.MCP_RESOURCES,
-		label: 'MCP Resources',
+		label: () => m.attachment_mcp_resources(),
 		icon: FolderOpen,
 		enabledWhen: AttachmentItemEnabledWhen.ALWAYS,
 		action: AttachmentAction.MCP_RESOURCES_CLICK,
@@ -109,4 +110,4 @@ export const ATTACHMENT_MCP_ITEMS: AttachmentMenuItem[] = [
 	}
 ];
 
-export const ATTACHMENT_TOOLTIP_TEXT = 'Add files, prompts, tools or MCP Servers';
+export const ATTACHMENT_TOOLTIP_TEXT = () => m.attachment_tooltip_text();

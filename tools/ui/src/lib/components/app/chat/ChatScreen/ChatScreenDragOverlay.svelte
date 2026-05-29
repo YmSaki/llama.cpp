@@ -1,5 +1,6 @@
 <script>
 	import { Upload } from '@lucide/svelte';
+	import { m } from '$lib/paraglide/messages.js';
 </script>
 
 <div
@@ -10,8 +11,8 @@
 	>
 		<Upload class="mb-4 h-12 w-12 text-muted-foreground" />
 
-		<p class="text-lg font-medium text-foreground">Attach a file</p>
+		<p class="text-lg font-medium text-foreground">{m.drag_overlay_attach()}</p>
 
-		<p class="text-sm text-muted-foreground">Drop your files here to upload</p>
+		<p class="text-sm text-muted-foreground">{m.drag_overlay_drop()}</p>
 	</div>
 </div>

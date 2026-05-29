@@ -28,6 +28,7 @@ import McpLogo from '$lib/components/app/mcp/McpLogo.svelte';
 import { SETTINGS_KEYS } from './settings-keys';
 import { ROUTES, SETTINGS_SECTION_SLUGS } from './routes';
 import { TITLE_GENERATION } from './title-generation';
+import { m } from '$lib/paraglide/messages.js';
 
 export const SETTINGS_SECTION_TITLES = {
 	GENERAL: 'General',
@@ -41,10 +42,11 @@ export const SETTINGS_SECTION_TITLES = {
 	DEVELOPER: 'Developer'
 } as const;
 
-const STANDALONE_SECTIONS: { title: SettingsSectionTitle; slug: string; icon: Component }[] = [
-	{ title: SETTINGS_SECTION_TITLES.TOOLS, slug: SETTINGS_SECTION_SLUGS.TOOLS, icon: PencilRuler },
+const STANDALONE_SECTIONS: SettingsSection[] = [
+	{ title: SETTINGS_SECTION_TITLES.TOOLS, titleLabel: () => m.settings_section_tools(), slug: SETTINGS_SECTION_SLUGS.TOOLS, icon: PencilRuler },
 	{
 		title: SETTINGS_SECTION_TITLES.IMPORT_EXPORT,
+		titleLabel: () => m.settings_section_import_export(),
 		slug: SETTINGS_SECTION_SLUGS.IMPORT_EXPORT,
 		icon: Database
 	}
@@ -59,12 +61,33 @@ const COLOR_MODE_OPTIONS: Array<{ value: string; label: string; icon: Component 
 const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 	[SETTINGS_SECTION_SLUGS.GENERAL]: {
 		title: SETTINGS_SECTION_TITLES.GENERAL,
+		titleLabel: () => m.settings_section_general(),
 		slug: SETTINGS_SECTION_SLUGS.GENERAL,
 		icon: Sliders,
 		settings: [
 			{
+				key: SETTINGS_KEYS.LANGUAGE,
+				label: () => m.settings_general_language(),
+				help: 'Select the display language for the interface. Machine translations may contain errors.',
+				defaultValue: 'en',
+				type: SettingsFieldType.SELECT,
+				section: SETTINGS_SECTION_SLUGS.GENERAL,
+				options: [
+					{ value: 'en', label: 'English' },
+					{ value: 'ja', label: '日本語' },
+					{ value: 'zh-CN', label: '中文 (简体)' },
+					{ value: 'zh-TW', label: '中文 (繁體)' },
+					{ value: 'ko', label: '한국어' },
+					{ value: 'de', label: 'Deutsch' },
+					{ value: 'fr', label: 'Français' },
+					{ value: 'es', label: 'Español' },
+					{ value: 'pt-BR', label: 'Português (BR)' },
+					{ value: 'ru', label: 'Русский' }
+				]
+			},
+			{
 				key: SETTINGS_KEYS.THEME,
-				label: 'Theme',
+				label: () => m.settings_general_theme(),
 				help: 'Choose the color theme for the interface. You can choose between System (follows your device settings), Light, or Dark.',
 				defaultValue: ColorMode.SYSTEM,
 				type: SettingsFieldType.SELECT,
@@ -74,7 +97,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.API_KEY,
-				label: 'API Key',
+				label: () => m.settings_general_api_key(),
 				help: `Set the API Key if you are using <code> ${CLI_FLAGS.API_KEY} </code> option for the server.`,
 				defaultValue: '',
 				type: SettingsFieldType.INPUT,
@@ -82,7 +105,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.SYSTEM_MESSAGE,
-				label: 'System Message',
+				label: () => m.settings_general_system_message(),
 				help: 'The starting message that defines how model should behave.',
 				defaultValue: '',
 				type: SettingsFieldType.TEXTAREA,
@@ -94,7 +117,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.PASTE_LONG_TEXT_TO_FILE_LEN,
-				label: 'Paste long text to file length',
+				label: () => m.settings_general_paste_long_text(),
 				help: 'On pasting long text, it will be converted to a file. You can control the file length by setting the value of this parameter. Value 0 means disable.',
 				defaultValue: 2500,
 				type: SettingsFieldType.INPUT,
@@ -106,7 +129,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.SEND_ON_ENTER,
-				label: 'Send message on Enter',
+				label: () => m.settings_general_send_on_enter(),
 				help: 'Use Enter to send messages and Shift + Enter for new lines. When disabled, use Ctrl/Cmd + Enter.',
 				defaultValue: true,
 				type: SettingsFieldType.CHECKBOX,
@@ -118,7 +141,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.COPY_TEXT_ATTACHMENTS_AS_PLAIN_TEXT,
-				label: 'Copy text attachments as plain text',
+				label: () => m.settings_general_copy_text_attachments(),
 				help: 'When copying a message with text attachments, combine them into a single plain text string instead of a special format that can be pasted back as attachments.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -130,7 +153,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.ENABLE_CONTINUE_GENERATION,
-				label: 'Enable "Continue" button',
+				label: () => m.settings_general_enable_continue(),
 				help: 'Enable "Continue" button for assistant messages, including reasoning models.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -143,7 +166,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.PDF_AS_IMAGE,
-				label: 'Parse PDF as image',
+				label: () => m.settings_general_pdf_as_image(),
 				help: 'Parse PDF as image instead of text. Automatically falls back to text processing for non-vision models.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -155,7 +178,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.ASK_FOR_TITLE_CONFIRMATION,
-				label: 'Ask for confirmation before changing conversation title',
+				label: () => m.settings_general_ask_for_title_confirmation(),
 				help: 'Ask for confirmation before automatically changing conversation title when editing the first message.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -167,7 +190,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.TITLE_GENERATION_USE_FIRST_LINE,
-				label: 'Use first non-empty line for conversation title',
+				label: () => m.settings_general_use_first_line_title(),
 				help: 'Use only the first non-empty line of the prompt to generate the conversation title.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -179,7 +202,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.TITLE_GENERATION_USE_LLM,
-				label: 'Use LLM to generate conversation title',
+				label: () => m.settings_general_title_use_llm(),
 				help: 'Use the LLM to automatically generate conversation titles based on the first message exchange.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -188,7 +211,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.TITLE_GENERATION_PROMPT,
-				label: 'LLM title generation prompt',
+				label: () => m.settings_general_title_prompt(),
 				help: 'Optional template for the title generation prompt. Use {{USER}} for the user message and {{ASSISTANT}} for the assistant message.',
 				defaultValue: TITLE_GENERATION.DEFAULT_PROMPT,
 				type: SettingsFieldType.TEXTAREA,
@@ -196,7 +219,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.MAX_IMAGE_RESOLUTION,
-				label: 'Maximum image resolution (megapixels)',
+				label: () => m.settings_general_max_image_resolution(),
 				help: 'Images larger than this will be resized before sending to server. Set to 0 to disable.',
 				defaultValue: 0,
 				type: SettingsFieldType.INPUT,
@@ -206,12 +229,13 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 	},
 	[SETTINGS_SECTION_SLUGS.DISPLAY]: {
 		title: SETTINGS_SECTION_TITLES.DISPLAY,
+		titleLabel: () => m.settings_section_display(),
 		slug: SETTINGS_SECTION_SLUGS.DISPLAY,
 		icon: Monitor,
 		settings: [
 			{
 				key: SETTINGS_KEYS.SHOW_MESSAGE_STATS,
-				label: 'Show message generation statistics',
+				label: () => m.settings_display_show_stats(),
 				help: 'Display generation statistics (tokens/second, token count, duration) below each assistant message.',
 				defaultValue: true,
 				type: SettingsFieldType.CHECKBOX,
@@ -223,7 +247,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.SHOW_THOUGHT_IN_PROGRESS,
-				label: 'Show thought in progress',
+				label: () => m.settings_display_show_thought(),
 				help: 'Expand thought process by default when generating messages.',
 				defaultValue: true,
 				type: SettingsFieldType.CHECKBOX,
@@ -235,7 +259,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.SHOW_TOOL_CALL_IN_PROGRESS,
-				label: 'Show tool call in progress',
+				label: () => m.settings_display_show_tool_call(),
 				help: 'Automatically expand tool call details while executing and keep them expanded after completion.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -247,7 +271,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.KEEP_STATS_VISIBLE,
-				label: 'Keep stats visible after generation',
+				label: () => m.settings_display_keep_stats(),
 				help: 'Keep processing statistics visible after generation finishes.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -259,7 +283,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.AUTO_MIC_ON_EMPTY,
-				label: 'Show microphone on empty input',
+				label: () => m.settings_display_show_mic_empty(),
 				help: 'Automatically show microphone button instead of send button when textarea is empty for models with audio modality support.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -272,7 +296,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.RENDER_USER_CONTENT_AS_MARKDOWN,
-				label: 'Render user content as Markdown',
+				label: () => m.settings_display_render_markdown(),
 				help: 'Render user messages using markdown formatting in the chat.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -284,7 +308,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.FULL_HEIGHT_CODE_BLOCKS,
-				label: 'Use full height code blocks',
+				label: () => m.settings_display_full_height_code(),
 				help: 'Always display code blocks at their full natural height, overriding any height limits.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -296,7 +320,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DISABLE_AUTO_SCROLL,
-				label: 'Disable automatic scroll',
+				label: () => m.settings_display_disable_autoscroll(),
 				help: 'Disable automatic scrolling while messages stream so you can control the viewport position manually.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -308,7 +332,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.ALWAYS_SHOW_SIDEBAR_ON_DESKTOP,
-				label: 'Always show sidebar on desktop',
+				label: () => m.settings_display_always_sidebar(),
 				help: 'Always keep the sidebar visible on desktop instead of auto-hiding it.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -320,7 +344,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.SHOW_RAW_MODEL_NAMES,
-				label: 'Show raw model names',
+				label: () => m.settings_display_raw_model_names(),
 				help: 'Display full raw model identifiers (e.g. "ggml-org/GLM-4.7-Flash-GGUF:Q8_0") instead of parsed names with badges.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -332,7 +356,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.ALWAYS_SHOW_AGENTIC_TURNS,
-				label: 'Always show agentic turns in conversation',
+				label: () => m.settings_display_always_agentic_turns(),
 				help: 'Always expand and display agentic loop turns in conversation messages.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -346,12 +370,13 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 	},
 	[SETTINGS_SECTION_SLUGS.SAMPLING]: {
 		title: SETTINGS_SECTION_TITLES.SAMPLING,
+		titleLabel: () => m.settings_section_sampling(),
 		slug: SETTINGS_SECTION_SLUGS.SAMPLING,
 		icon: Funnel,
 		settings: [
 			{
 				key: SETTINGS_KEYS.TEMPERATURE,
-				label: 'Temperature',
+				label: () => m.settings_sampling_temperature(),
 				help: 'Controls the randomness of the generated text by affecting the probability distribution of the output tokens. Higher = more random, lower = more focused.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -363,7 +388,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DYNATEMP_RANGE,
-				label: 'Dynamic temperature range',
+				label: () => m.settings_sampling_dynatemp_range(),
 				help: 'Addon for the temperature sampler. The added value to the range of dynamic temperature, which adjusts probabilities by entropy of tokens.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -375,7 +400,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DYNATEMP_EXPONENT,
-				label: 'Dynamic temperature exponent',
+				label: () => m.settings_sampling_dynatemp_exponent(),
 				help: 'Addon for the temperature sampler. Smoothes out the probability redistribution based on the most probable token.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -387,7 +412,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.TOP_K,
-				label: 'Top K',
+				label: () => m.settings_sampling_top_k(),
 				help: 'Keeps only k top tokens.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -396,7 +421,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.TOP_P,
-				label: 'Top P',
+				label: () => m.settings_sampling_top_p(),
 				help: 'Limits tokens to those that together have a cumulative probability of at least p',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -405,7 +430,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.MIN_P,
-				label: 'Min P',
+				label: () => m.settings_sampling_min_p(),
 				help: 'Limits tokens based on the minimum probability for a token to be considered, relative to the probability of the most likely token.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -414,7 +439,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.XTC_PROBABILITY,
-				label: 'XTC probability',
+				label: () => m.settings_sampling_xtc_probability(),
 				help: 'XTC sampler cuts out top tokens; this parameter controls the chance of cutting tokens at all. 0 disables XTC.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -426,7 +451,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.XTC_THRESHOLD,
-				label: 'XTC threshold',
+				label: () => m.settings_sampling_xtc_threshold(),
 				help: 'XTC sampler cuts out top tokens; this parameter controls the token probability that is required to cut that token.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -438,7 +463,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.TYP_P,
-				label: 'Typical P',
+				label: () => m.settings_sampling_typ_p(),
 				help: 'Sorts and limits tokens based on the difference between log-probability and entropy.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -447,7 +472,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.MAX_TOKENS,
-				label: 'Max tokens',
+				label: () => m.settings_sampling_max_tokens(),
 				help: 'The maximum number of token per output. Use -1 for infinite (no limit).',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -459,7 +484,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.SAMPLERS,
-				label: 'Samplers',
+				label: () => m.settings_sampling_samplers(),
 				help: 'The order at which samplers are applied, in simplified way. Default is "top_k;typ_p;top_p;min_p;temperature": top_k->typ_p->top_p->min_p->temperature',
 				defaultValue: '',
 				type: SettingsFieldType.INPUT,
@@ -468,7 +493,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.BACKEND_SAMPLING,
-				label: 'Backend sampling',
+				label: () => m.settings_sampling_backend(),
 				help: 'Enable backend-based samplers. When enabled, supported samplers run on the accelerator backend for faster sampling.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -482,12 +507,13 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 	},
 	[SETTINGS_SECTION_SLUGS.PENALTIES]: {
 		title: SETTINGS_SECTION_TITLES.PENALTIES,
+		titleLabel: () => m.settings_section_penalties(),
 		slug: SETTINGS_SECTION_SLUGS.PENALTIES,
 		icon: AlertTriangle,
 		settings: [
 			{
 				key: SETTINGS_KEYS.REPEAT_LAST_N,
-				label: 'Repeat last N',
+				label: () => m.settings_penalties_repeat_last_n(),
 				help: 'Last n tokens to consider for penalizing repetition',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -499,7 +525,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.REPEAT_PENALTY,
-				label: 'Repeat penalty',
+				label: () => m.settings_penalties_repeat(),
 				help: 'Controls the repetition of token sequences in the generated text',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -511,7 +537,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.PRESENCE_PENALTY,
-				label: 'Presence penalty',
+				label: () => m.settings_penalties_presence(),
 				help: 'Limits tokens based on whether they appear in the output or not.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -523,7 +549,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.FREQUENCY_PENALTY,
-				label: 'Frequency penalty',
+				label: () => m.settings_penalties_frequency(),
 				help: 'Limits tokens based on how often they appear in the output.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -535,7 +561,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DRY_MULTIPLIER,
-				label: 'DRY multiplier',
+				label: () => m.settings_penalties_dry_multiplier(),
 				help: 'DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling multiplier.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -547,7 +573,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DRY_BASE,
-				label: 'DRY base',
+				label: () => m.settings_penalties_dry_base(),
 				help: 'DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the DRY sampling base value.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -556,7 +582,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DRY_ALLOWED_LENGTH,
-				label: 'DRY allowed length',
+				label: () => m.settings_penalties_dry_allowed_length(),
 				help: 'DRY sampling reduces repetition in generated text even across long contexts. This parameter sets the allowed length for DRY sampling.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -568,7 +594,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DRY_PENALTY_LAST_N,
-				label: 'DRY penalty last N',
+				label: () => m.settings_penalties_dry_penalty_last_n(),
 				help: 'DRY sampling reduces repetition in generated text even across long contexts. This parameter sets DRY penalty for the last n tokens.',
 				defaultValue: undefined,
 				type: SettingsFieldType.INPUT,
@@ -582,12 +608,13 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 	},
 	[SETTINGS_SECTION_SLUGS.AGENTIC]: {
 		title: SETTINGS_SECTION_TITLES.AGENTIC,
+		titleLabel: () => m.settings_section_agentic(),
 		slug: SETTINGS_SECTION_SLUGS.AGENTIC,
 		icon: ListRestart,
 		settings: [
 			{
 				key: SETTINGS_KEYS.AGENTIC_MAX_TURNS,
-				label: 'Agentic turns',
+				label: () => m.settings_agentic_max_turns(),
 				help: 'Maximum number of tool execution cycles before stopping (prevents infinite loops).',
 				defaultValue: 10,
 				type: SettingsFieldType.INPUT,
@@ -600,7 +627,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.AGENTIC_MAX_TOOL_PREVIEW_LINES,
-				label: 'Max lines per tool preview',
+				label: () => m.settings_agentic_max_tool_preview(),
 				help: 'Number of lines shown in tool output previews (last N lines). Only these previews and the final LLM response persist after the agentic loop completes.',
 				defaultValue: 25,
 				type: SettingsFieldType.INPUT,
@@ -615,12 +642,13 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 	},
 	[SETTINGS_SECTION_SLUGS.DEVELOPER]: {
 		title: SETTINGS_SECTION_TITLES.DEVELOPER,
+		titleLabel: () => m.settings_section_developer(),
 		slug: SETTINGS_SECTION_SLUGS.DEVELOPER,
 		icon: Code,
 		settings: [
 			{
 				key: SETTINGS_KEYS.PRE_ENCODE_CONVERSATION,
-				label: 'Pre-fill KV cache after response',
+				label: () => m.settings_developer_pre_encode(),
 				help: 'After each response, re-submit the conversation to pre-fill the server KV cache. Makes the next turn faster since the prompt is already encoded while you read the response.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -628,7 +656,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.DISABLE_REASONING_PARSING,
-				label: 'Disable reasoning content parsing',
+				label: () => m.settings_developer_disable_reasoning(),
 				help: 'Send reasoning_format=none so the server returns thinking tokens inline instead of extracting them into a separate field.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -636,7 +664,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.EXCLUDE_REASONING_FROM_CONTEXT,
-				label: 'Exclude reasoning from context',
+				label: () => m.settings_developer_exclude_reasoning(),
 				help: 'Strip thinking from previous messages before sending. When off, thinking is sent back via the reasoning_content field so the model sees its own chain-of-thought across turns.',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -648,7 +676,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.SHOW_RAW_OUTPUT_SWITCH,
-				label: 'Enable raw output toggle',
+				label: () => m.settings_developer_raw_output(),
 				help: 'Show toggle button to display messages as plain text instead of Markdown-formatted content',
 				defaultValue: false,
 				type: SettingsFieldType.CHECKBOX,
@@ -660,7 +688,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 			},
 			{
 				key: SETTINGS_KEYS.CUSTOM,
-				label: 'Custom JSON',
+				label: () => m.settings_developer_custom_json(),
 				help: 'Custom JSON parameters to send to the API. Must be valid JSON format.',
 				defaultValue: '',
 				type: SettingsFieldType.TEXTAREA,
@@ -670,12 +698,13 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 	},
 	[SETTINGS_SECTION_SLUGS.MCP]: {
 		title: SETTINGS_SECTION_TITLES.MCP,
+		titleLabel: () => m.settings_section_mcp(),
 		slug: SETTINGS_SECTION_SLUGS.MCP,
 		icon: McpLogo,
 		settings: [
 			{
 				key: SETTINGS_KEYS.MCP_REQUEST_TIMEOUT_SECONDS,
-				label: 'Request timeout (seconds)',
+				label: () => m.settings_mcp_request_timeout(),
 				help: 'Default timeout for individual MCP tool calls. Can be overridden per server.',
 				defaultValue: DEFAULT_MCP_CONFIG.requestTimeoutSeconds,
 				type: SettingsFieldType.INPUT,
@@ -689,7 +718,7 @@ const SETTINGS_REGISTRY: Record<string, SettingsSectionEntry> = {
 const NON_UI_SETTINGS: SettingsEntry[] = [
 	{
 		key: SETTINGS_KEYS.SHOW_SYSTEM_MESSAGE,
-		label: 'Show system message',
+		label: () => m.settings_general_show_system_message(),
 		help: 'Display the system message at the top of each conversation.',
 		defaultValue: true,
 		type: SettingsFieldType.CHECKBOX,
@@ -700,7 +729,7 @@ const NON_UI_SETTINGS: SettingsEntry[] = [
 	},
 	{
 		key: SETTINGS_KEYS.MCP_SERVERS,
-		label: 'MCP servers',
+		label: () => m.mcp_servers_label(),
 		help: 'Configure MCP servers as a JSON list. Use the form in the MCP Client settings section to edit.',
 		defaultValue: '[]',
 		type: SettingsFieldType.INPUT,
@@ -746,6 +775,7 @@ export type { SettingsSection } from '$lib/types';
 export const SETTINGS_CHAT_SECTIONS: SettingsSection[] = [
 	...Object.values(SETTINGS_REGISTRY).map((section) => ({
 		title: section.title,
+		titleLabel: section.titleLabel,
 		slug: section.slug,
 		icon: section.icon,
 		fields: section.settings.map((s) => ({

@@ -2,6 +2,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Switch } from '$lib/components/ui/switch';
 	import { KeyValuePairs } from '$lib/components/app';
+	import { m } from '$lib/paraglide/messages.js';
 	import type { KeyValuePair } from '$lib/types';
 	import { parseHeadersToArray, serializeHeaders } from '$lib/utils';
 	import { UrlProtocol } from '$lib/enums';
@@ -80,7 +81,7 @@
 				/>
 
 				<span>
-					<span class="text-xs text-muted-foreground">Use llama-server proxy</span>
+					<span class="text-xs text-muted-foreground">{m.mcp_server_use_proxy()}</span>
 
 					<br />
 

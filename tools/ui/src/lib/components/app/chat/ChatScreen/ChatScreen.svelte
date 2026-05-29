@@ -40,6 +40,7 @@
 	import { parseFilesToMessageExtras, processFilesToChatUploaded } from '$lib/utils/browser-only';
 	import { onMount } from 'svelte';
 	import ChatScreenGreeting from './ChatScreenGreeting.svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	let { showCenteredEmpty = false } = $props();
 
@@ -388,7 +389,7 @@
 {:else}
 	<div
 		bind:this={chatScrollContainer}
-		aria-label="Chat interface with file drop zone"
+		aria-label={m.sr_chat_interface()}
 		class="flex h-full flex-col overflow-y-auto px-4 md:px-6"
 		ondragenter={handleDragEnter}
 		ondragleave={handleDragLeave}
@@ -450,10 +451,10 @@
 
 <DialogConfirmation
 	bind:open={showDeleteDialog}
-	title="Delete Conversation"
-	description="Are you sure you want to delete this conversation? This action cannot be undone and will permanently remove all messages in this conversation."
-	confirmText="Delete"
-	cancelText="Cancel"
+	title={m.chat_delete_conversation_title()}
+	description={m.chat_delete_conversation_description()}
+	confirmText={m.chat_delete_conversation_confirm()}
+	cancelText={m.import_export_delete_all_dialog_cancel()}
 	variant="destructive"
 	icon={Trash2}
 	onConfirm={handleDeleteConfirm}

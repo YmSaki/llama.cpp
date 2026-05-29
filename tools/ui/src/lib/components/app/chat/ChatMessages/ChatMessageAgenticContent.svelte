@@ -34,6 +34,7 @@
 		agenticResolveContinue
 	} from '$lib/stores/agentic.svelte';
 	import { config } from '$lib/stores/settings.svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		message: DatabaseMessage;
@@ -288,7 +289,7 @@
 						{/each}
 					</div>
 				{:else}
-					<div class="rounded bg-muted/30 p-2 text-xs text-muted-foreground italic">No output</div>
+					<div class="rounded bg-muted/30 p-2 text-xs text-muted-foreground italic">{m.agentic_no_output()}</div>
 				{/if}
 			</div>
 		</CollapsibleContentBlock>

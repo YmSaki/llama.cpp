@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import { McpServerForm } from '$lib/components/app/mcp';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		serverId: string;
@@ -41,7 +42,7 @@
 </script>
 
 <div class="space-y-4">
-	<p class="font-medium">Configure Server</p>
+	<p class="font-medium">{m.mcp_server_edit_title()}</p>
 
 	<McpServerForm
 		url={editUrl}
@@ -55,10 +56,10 @@
 	/>
 
 	<div class="flex items-center justify-end gap-2">
-		<Button variant="secondary" size="sm" onclick={onCancel}>Cancel</Button>
+		<Button variant="secondary" size="sm" onclick={onCancel}>{m.mcp_server_edit_cancel()}</Button>
 
 		<Button size="sm" onclick={handleSave} disabled={!canSave}>
-			{serverUrl.trim() ? 'Update' : 'Add'}
+			{serverUrl.trim() ? m.mcp_server_edit_update() : m.mcp_server_edit_add()}
 		</Button>
 	</div>
 </div>

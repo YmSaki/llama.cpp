@@ -2,13 +2,15 @@
 	import { Server } from '@lucide/svelte';
 	import { ServerStatus } from '$lib/components/app';
 	import { fade } from 'svelte/transition';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		class?: string;
 		message?: string;
 	}
 
-	let { class: className = '', message = 'Initializing connection to server...' }: Props = $props();
+	let { class: className = '', message }: Props = $props();
+	let effectiveMessage = $derived(message ?? m.server_loading_initializing());
 </script>
 
 <div class="flex h-full items-center justify-center {className}">
@@ -18,10 +20,10 @@
 				<Server class="h-8 w-8 animate-pulse text-muted-foreground" />
 			</div>
 
-			<h2 class="mb-2 text-xl font-semibold">Connecting to Server</h2>
+			<h2 class="mb-2 text-xl font-semibold">{m.server_loading_connecting()}</h2>
 
 			<p class="text-sm text-muted-foreground">
-				{message}
+				{effectiveMessage}
 			</p>
 		</div>
 

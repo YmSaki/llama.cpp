@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { paraglideVitePlugin } from '@inlang/paraglide-js';
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -23,7 +24,17 @@ export default defineConfig({
 		minify: true
 	},
 
-	plugins: [tailwindcss(), sveltekit(), devtoolsJson(), llamaCppBuildPlugin()],
+	plugins: [
+		tailwindcss(),
+		sveltekit(),
+		paraglideVitePlugin({
+			project: './project.inlang',
+			outdir: './src/lib/paraglide',
+			strategy: ['localStorage', 'preferredLanguage', 'baseLocale']
+		}),
+		devtoolsJson(),
+		llamaCppBuildPlugin()
+	],
 
 	test: {
 		projects: [

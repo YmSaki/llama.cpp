@@ -4,6 +4,7 @@
 	import { ServerErrorSplash } from '$lib/components/app';
 	import { ROUTES } from '$lib/constants/routes';
 	import { APP_NAME } from '$lib/constants';
+	import { m } from '$lib/paraglide/messages.js';
 
 	let error = $derived($page.error);
 	let status = $derived($page.status);
@@ -24,12 +25,12 @@
 </script>
 
 <svelte:head>
-	<title>Error {status} - {APP_NAME}</title>
+	<title>{m.error_page_title({ status })}</title>
 </svelte:head>
 
 {#if isApiKeyError}
 	<ServerErrorSplash
-		error={error?.message || 'Access denied - check server permissions'}
+		error={error?.message || m.error_page_api_key_denied()}
 		onRetry={handleRetry}
 		showRetry={false}
 		showTroubleshooting={false}
@@ -56,7 +57,7 @@
 						/>
 					</svg>
 				</div>
-				<h1 class="mb-2 text-2xl font-bold">Error {status}</h1>
+				<h1 class="mb-2 text-2xl font-bold">{m.error_page_heading({ status })}</h1>
 				<p class="text-muted-foreground">
 					{error?.message || 'Something went wrong'}
 				</p>
@@ -65,7 +66,7 @@
 				onclick={() => goto(ROUTES.START)}
 				class="rounded-md bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
 			>
-				Go Home
+				{m.error_page_go_home()}
 			</button>
 		</div>
 	</div>

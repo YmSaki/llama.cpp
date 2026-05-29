@@ -43,6 +43,7 @@ import {
 
 import { ROUTES } from '$lib/constants/routes';
 import { RouterService } from '$lib/services/router.service';
+import { m } from '$lib/paraglide/messages.js';
 import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 
 export interface ConversationTreeItem {
@@ -371,12 +372,12 @@ class ConversationsStore {
 			this.clearActiveConversation();
 			this.conversations = [];
 
-			toast.success('All conversations deleted');
+			toast.success(m.toast_conversations_all_deleted());
 
 			await goto(ROUTES.NEW_CHAT);
 		} catch (error) {
 			console.error('Failed to delete all conversations:', error);
-			toast.error('Failed to delete conversations');
+			toast.error(m.toast_conversations_delete_failed());
 		}
 	}
 
@@ -728,12 +729,12 @@ class ConversationsStore {
 
 			await goto(RouterService.chat(newConv.id));
 
-			toast.success('Conversation forked');
+			toast.success(m.toast_conversation_forked());
 
 			return newConv.id;
 		} catch (error) {
 			console.error('Failed to fork conversation:', error);
-			toast.error('Failed to fork conversation');
+			toast.error(m.toast_conversation_fork_failed());
 
 			return null;
 		}
@@ -873,7 +874,7 @@ class ConversationsStore {
 					}
 
 					const result = await DatabaseService.importConversations(importedData);
-					toast.success(`Imported ${result.imported} conversation(s), skipped ${result.skipped}`);
+					toast.success(m.toast_conversations_imported({ imported: result.imported, skipped: result.skipped }));
 
 					await this.loadConversations();
 

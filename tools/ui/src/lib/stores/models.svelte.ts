@@ -1,3 +1,4 @@
+import { m } from '$lib/paraglide/messages.js';
 import { SvelteMap, SvelteSet } from 'svelte/reactivity';
 import { toast } from 'svelte-sonner';
 import { ServerModelStatus, ModelModality } from '$lib/enums';
@@ -617,10 +618,10 @@ class ModelsStore {
 			await ModelsService.load(modelId);
 			await this.pollForModelStatus(modelId, ServerModelStatus.LOADED);
 			await this.updateModelModalities(modelId);
-			toast.success(`Model loaded: ${this.toDisplayName(modelId)}`);
+			toast.success(m.toast_model_loaded({ name: this.toDisplayName(modelId) }));
 		} catch (error) {
 			this.error = error instanceof Error ? error.message : 'Failed to load model';
-			toast.error(`Failed to load model: ${this.toDisplayName(modelId)}`);
+			toast.error(m.toast_model_load_failed({ name: this.toDisplayName(modelId) }));
 			throw error;
 		} finally {
 			this.modelLoadingStates.set(modelId, false);
@@ -637,10 +638,10 @@ class ModelsStore {
 		try {
 			await ModelsService.unload(modelId);
 			await this.pollForModelStatus(modelId, ServerModelStatus.UNLOADED);
-			toast.info(`Model unloaded: ${this.toDisplayName(modelId)}`);
+			toast.info(m.toast_model_unloaded({ name: this.toDisplayName(modelId) }));
 		} catch (error) {
 			this.error = error instanceof Error ? error.message : 'Failed to unload model';
-			toast.error(`Failed to unload model: ${this.toDisplayName(modelId)}`);
+			toast.error(m.toast_model_unload_failed({ name: this.toDisplayName(modelId) }));
 			throw error;
 		} finally {
 			this.modelLoadingStates.set(modelId, false);
@@ -678,7 +679,7 @@ class ModelsStore {
 		try {
 			localStorage.setItem(FAVORITE_MODELS_LOCALSTORAGE_KEY, JSON.stringify([...next]));
 		} catch {
-			toast.error('Failed to save favorite models to local storage');
+			toast.error(m.toast_model_favorite_save_failed());
 		}
 	}
 
@@ -687,7 +688,7 @@ class ModelsStore {
 			const raw = localStorage.getItem(FAVORITE_MODELS_LOCALSTORAGE_KEY);
 			return raw ? new Set(JSON.parse(raw) as string[]) : new Set();
 		} catch {
-			toast.error('Failed to load favorite models from local storage');
+			toast.error(m.toast_model_favorite_load_failed());
 			return new Set();
 		}
 	}

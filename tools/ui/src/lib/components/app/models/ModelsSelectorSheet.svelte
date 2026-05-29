@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ChevronDown, Loader2, Package } from '@lucide/svelte';
 	import * as Sheet from '$lib/components/ui/sheet';
+	import { m } from '$lib/paraglide/messages.js';
 	import { useModelsSelector } from '$lib/hooks/use-models-selector.svelte';
 	import {
 		DialogModelInformation,
@@ -56,10 +57,10 @@
 	{#if ms.loading && ms.options.length === 0 && ms.isRouter}
 		<div class="flex items-center gap-2 text-xs text-muted-foreground">
 			<Loader2 class="h-3.5 w-3.5 animate-spin" />
-			Loading models…
+			{m.models_loading()}
 		</div>
 	{:else if ms.options.length === 0 && ms.isRouter}
-		<p class="text-xs text-muted-foreground">No models available.</p>
+		<p class="text-xs text-muted-foreground">{m.models_no_models_available()}</p>
 	{:else}
 		{@const selectedOption = ms.getDisplayOption()}
 
@@ -84,7 +85,7 @@
 				<Package class="h-3.5 w-3.5" />
 
 				{#if !selectedOption}
-					<span class="min-w-0 font-medium">Select model</span>
+					<span class="min-w-0 font-medium">{m.models_select()}</span>
 				{:else}
 					<ModelId
 						class="text-xs"
@@ -104,7 +105,7 @@
 			<Sheet.Root bind:open={sheetOpen} onOpenChange={handleSheetOpenChange}>
 				<Sheet.Content side="bottom" class="max-h-[85vh] gap-1">
 					<Sheet.Header>
-						<Sheet.Title>Select Model</Sheet.Title>
+						<Sheet.Title>{m.models_select_model()}</Sheet.Title>
 
 						<Sheet.Description class="sr-only">
 							Choose a model to use for the conversation
@@ -114,7 +115,7 @@
 					<div class="flex flex-col gap-1 pb-4">
 						<div class="mb-3 px-4">
 							<SearchInput
-								placeholder="Search models..."
+								placeholder={m.models_search_placeholder()}
 								value={ms.searchTerm}
 								onInput={(v) => ms.setSearchTerm(v)}
 							/>
@@ -130,13 +131,13 @@
 									<span class="min-w-0 flex-1 truncate">
 										{selectedOption?.name || currentModel}
 									</span>
-									<span class="ml-2 text-xs whitespace-nowrap opacity-70">(not available)</span>
+									<span class="ml-2 text-xs whitespace-nowrap opacity-70">{m.models_not_available()}</span>
 								</button>
 								<div class="my-1 h-px bg-border"></div>
 							{/if}
 
 							{#if ms.filteredOptions.length === 0}
-								<p class="px-3 py-3 text-center text-sm text-muted-foreground">No models found.</p>
+								<p class="px-3 py-3 text-center text-sm text-muted-foreground">{m.models_no_models_found()}</p>
 							{/if}
 
 							<ModelsSelectorList

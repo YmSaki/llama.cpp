@@ -15,12 +15,12 @@ export type SettingsSectionTitle =
 /** Per-setting metadata — one entry per setting. */
 export interface SettingsEntry {
 	key: string;
-	label: string;
+	label: string | (() => string);
 	help: string;
 	defaultValue: SettingsConfigValue;
 	type: SettingsFieldType;
 	section?: string;
-	options?: Array<{ value: string; label: string; icon: Component }>;
+	options?: Array<{ value: string; label: string; icon?: Component }>;
 	isExperimental?: boolean;
 	isPositiveInteger?: boolean;
 	sync?: {
@@ -32,6 +32,7 @@ export interface SettingsEntry {
 /** A settings section with its icon, slug, title, and ordered settings. */
 export interface SettingsSectionEntry {
 	title: SettingsSectionTitle;
+	titleLabel: () => string;
 	slug: string;
 	icon: Component;
 	settings: SettingsEntry[];
@@ -39,12 +40,12 @@ export interface SettingsSectionEntry {
 
 export interface SettingsFieldConfig {
 	key: string;
-	label: string;
+	label: string | (() => string);
 	type: SettingsFieldType;
 	isExperimental?: boolean;
 	isPositiveInteger?: boolean;
-	help?: string;
-	options?: Array<{ value: string; label: string; icon?: typeof Icon }>;
+	help?: string | (() => string);
+	options?: Array<{ value: string; label: string; icon?: Component }>;
 }
 
 /** Re-exported for backward compatibility. */
@@ -53,6 +54,7 @@ export interface SettingsSection {
 	icon: Component;
 	slug: string;
 	title: SettingsSectionTitle;
+	titleLabel: () => string;
 }
 
 export interface SettingsChatServiceOptions {

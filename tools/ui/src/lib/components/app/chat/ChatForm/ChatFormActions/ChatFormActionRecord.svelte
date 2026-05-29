@@ -2,6 +2,7 @@
 	import { Mic, Square } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		class?: string;
@@ -45,7 +46,7 @@
 
 		{#if !hasAudioModality}
 			<Tooltip.Content>
-				<p>Current model does not support audio</p>
+				<p>{m.chat_record_no_audio_support()}</p>
 			</Tooltip.Content>
 		{/if}
 	</Tooltip.Root>

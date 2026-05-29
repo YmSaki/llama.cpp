@@ -14,6 +14,7 @@
 	import { getFileTypeCategory } from '$lib/utils';
 	import { goto } from '$app/navigation';
 	import { ROUTES } from '$lib/constants/routes';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		canSend?: boolean;
@@ -130,7 +131,7 @@
 			onclick={onStop}
 			class="group h-8 w-8 rounded-full p-0 hover:bg-destructive/10!"
 		>
-			<span class="sr-only">Stop</span>
+			<span class="sr-only">{m.sr_stop()}</span>
 
 			<Square
 				class="h-8 w-8 fill-muted-foreground stroke-muted-foreground group-hover:fill-destructive group-hover:stroke-destructive hover:fill-destructive hover:stroke-destructive"

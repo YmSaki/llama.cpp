@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Table from '$lib/components/ui/table';
+	import { m } from '$lib/paraglide/messages.js';
 	import { BadgesModality, ActionIconCopyToClipboard } from '$lib/components/app';
 	import { serverStore } from '$lib/stores/server.svelte';
 	import { modelsStore, modelOptions, modelsLoading } from '$lib/stores/models.svelte';
@@ -84,15 +85,15 @@
 		</style>
 
 		<Dialog.Header>
-			<Dialog.Title>Model Information</Dialog.Title>
+			<Dialog.Title>{m.dialog_model_info_title()}</Dialog.Title>
 
-			<Dialog.Description>Current model details and capabilities</Dialog.Description>
+			<Dialog.Description>{m.dialog_model_info_description()}</Dialog.Description>
 		</Dialog.Header>
 
 		<div class="space-y-6 py-4">
 			{#if isLoadingModels || isLoadingRouterProps}
 				<div class="flex items-center justify-center py-8">
-					<div class="text-sm text-muted-foreground">Loading model information...</div>
+					<div class="text-sm text-muted-foreground">{m.dialog_model_info_loading()}</div>
 				</div>
 			{:else if firstModel}
 				{@const modelMeta = firstModel.meta}
@@ -101,7 +102,7 @@
 					<Table.Root>
 						<Table.Header>
 							<Table.Row>
-								<Table.Head class="w-[10rem]">Model</Table.Head>
+								<Table.Head class="w-[10rem]">{m.dialog_model_info_model()}</Table.Head>
 
 								<Table.Head>
 									<div class="inline-flex items-center gap-2">
@@ -124,7 +125,7 @@
 						<Table.Body>
 							<!-- Model Path -->
 							<Table.Row>
-								<Table.Cell class="h-10 align-middle font-medium">File Path</Table.Cell>
+								<Table.Cell class="h-10 align-middle font-medium">{m.dialog_model_info_file_path()}</Table.Cell>
 
 								<Table.Cell
 									class="inline-flex h-10 items-center gap-2 align-middle font-mono text-xs"
@@ -146,35 +147,35 @@
 							<!-- Context Size -->
 							{#if serverProps?.default_generation_settings?.n_ctx}
 								<Table.Row>
-									<Table.Cell class="h-10 align-middle font-medium">Context Size</Table.Cell>
+									<Table.Cell class="h-10 align-middle font-medium">{m.dialog_model_info_context_size()}</Table.Cell>
 
 									<Table.Cell
-										>{formatNumber(serverProps.default_generation_settings.n_ctx)} tokens</Table.Cell
+										>{formatNumber(serverProps.default_generation_settings.n_ctx)} {m.dialog_model_info_tokens_label()}</Table.Cell
 									>
 								</Table.Row>
 							{:else}
 								<Table.Row>
 									<Table.Cell class="h-10 align-middle font-medium text-red-500"
-										>Context Size</Table.Cell
+										>{m.dialog_model_info_context_size()}</Table.Cell
 									>
 
-									<Table.Cell class="text-red-500">Not available</Table.Cell>
+									<Table.Cell class="text-red-500">{m.dialog_model_info_context_size_unavailable()}</Table.Cell>
 								</Table.Row>
 							{/if}
 
 							<!-- Training Context -->
 							{#if modelMeta?.n_ctx_train}
 								<Table.Row>
-									<Table.Cell class="h-10 align-middle font-medium">Training Context</Table.Cell>
+									<Table.Cell class="h-10 align-middle font-medium">{m.dialog_model_info_training_context()}</Table.Cell>
 
-									<Table.Cell>{formatNumber(modelMeta.n_ctx_train)} tokens</Table.Cell>
+									<Table.Cell>{formatNumber(modelMeta.n_ctx_train)} {m.dialog_model_info_tokens_label()}</Table.Cell>
 								</Table.Row>
 							{/if}
 
 							<!-- Model Size -->
 							{#if modelMeta?.size}
 								<Table.Row>
-									<Table.Cell class="h-10 align-middle font-medium">Model Size</Table.Cell>
+									<Table.Cell class="h-10 align-middle font-medium">{m.dialog_model_info_model_size()}</Table.Cell>
 
 									<Table.Cell>{formatFileSize(modelMeta.size)}</Table.Cell>
 								</Table.Row>
@@ -183,7 +184,7 @@
 							<!-- Parameters -->
 							{#if modelMeta?.n_params}
 								<Table.Row>
-									<Table.Cell class="h-10 align-middle font-medium">Parameters</Table.Cell>
+									<Table.Cell class="h-10 align-middle font-medium">{m.dialog_model_info_parameters()}</Table.Cell>
 
 									<Table.Cell>{formatParameters(modelMeta.n_params)}</Table.Cell>
 								</Table.Row>
@@ -192,7 +193,7 @@
 							<!-- Embedding Size -->
 							{#if modelMeta?.n_embd}
 								<Table.Row>
-									<Table.Cell class="align-middle font-medium">Embedding Size</Table.Cell>
+									<Table.Cell class="align-middle font-medium">{m.dialog_model_info_embedding_size()}</Table.Cell>
 
 									<Table.Cell>{formatNumber(modelMeta.n_embd)}</Table.Cell>
 								</Table.Row>
@@ -201,23 +202,23 @@
 							<!-- Vocabulary Size -->
 							{#if modelMeta?.n_vocab}
 								<Table.Row>
-									<Table.Cell class="align-middle font-medium">Vocabulary Size</Table.Cell>
+									<Table.Cell class="align-middle font-medium">{m.dialog_model_info_vocabulary_size()}</Table.Cell>
 
-									<Table.Cell>{formatNumber(modelMeta.n_vocab)} tokens</Table.Cell>
+									<Table.Cell>{formatNumber(modelMeta.n_vocab)} {m.dialog_model_info_tokens_label()}</Table.Cell>
 								</Table.Row>
 							{/if}
 
 							<!-- Vocabulary Type -->
 							{#if modelMeta?.vocab_type}
 								<Table.Row>
-									<Table.Cell class="align-middle font-medium">Vocabulary Type</Table.Cell>
+									<Table.Cell class="align-middle font-medium">{m.dialog_model_info_vocabulary_type()}</Table.Cell>
 									<Table.Cell class="align-middle capitalize">{modelMeta.vocab_type}</Table.Cell>
 								</Table.Row>
 							{/if}
 
 							<!-- Total Slots -->
 							<Table.Row>
-								<Table.Cell class="align-middle font-medium">Parallel Slots</Table.Cell>
+								<Table.Cell class="align-middle font-medium">{m.dialog_model_info_parallel_slots()}</Table.Cell>
 
 								<Table.Cell>{serverProps.total_slots}</Table.Cell>
 							</Table.Row>
@@ -225,7 +226,7 @@
 							<!-- Modalities -->
 							{#if modalities.length > 0}
 								<Table.Row>
-									<Table.Cell class="align-middle font-medium">Modalities</Table.Cell>
+									<Table.Cell class="align-middle font-medium">{m.dialog_model_info_modalities()}</Table.Cell>
 
 									<Table.Cell>
 										<div class="flex flex-wrap gap-1">
@@ -237,7 +238,7 @@
 
 							<!-- Build Info -->
 							<Table.Row>
-								<Table.Cell class="align-middle font-medium">Build Info</Table.Cell>
+								<Table.Cell class="align-middle font-medium">{m.dialog_model_info_build_info()}</Table.Cell>
 
 								<Table.Cell class="align-middle font-mono text-xs"
 									>{serverProps.build_info}</Table.Cell
@@ -247,7 +248,7 @@
 							<!-- Chat Template -->
 							{#if serverProps.chat_template}
 								<Table.Row>
-									<Table.Cell class="align-middle font-medium">Chat Template</Table.Cell>
+									<Table.Cell class="align-middle font-medium">{m.dialog_model_info_chat_template()}</Table.Cell>
 
 									<Table.Cell class="py-10">
 										<div class="rounded-md bg-muted p-4">
@@ -262,7 +263,7 @@
 				{/if}
 			{:else if !isLoadingModels}
 				<div class="flex items-center justify-center py-8">
-					<div class="text-sm text-muted-foreground">No model information available</div>
+					<div class="text-sm text-muted-foreground">{m.dialog_model_info_none()}</div>
 				</div>
 			{/if}
 		</div>

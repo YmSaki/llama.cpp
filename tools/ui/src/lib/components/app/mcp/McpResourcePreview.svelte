@@ -2,6 +2,7 @@
 	import { FileText, Loader2, AlertCircle, Download } from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { mcpStore } from '$lib/stores/mcp.svelte';
+	import { m } from '$lib/paraglide/messages.js';
 	import {
 		isImageMimeType,
 		createBase64DataUrl,
@@ -75,7 +76,7 @@
 		<div class="flex flex-col items-center justify-center gap-2 py-8 text-muted-foreground">
 			<FileText class="h-8 w-8 opacity-50" />
 
-			<span class="text-sm">Select a resource to preview</span>
+			<span class="text-sm">{m.mcp_resource_select_to_preview()}</span>
 		</div>
 	{:else}
 		<div class="flex items-start justify-between gap-2">
@@ -142,13 +143,13 @@
 						<div class="flex items-center gap-2 rounded bg-muted p-2 text-sm text-muted-foreground">
 							<FileText class="h-4 w-4" />
 
-							<span>Binary content ({blob.mimeType || 'unknown type'})</span>
+							<span>{m.mcp_resource_binary_content({ mimeType: blob.mimeType || 'unknown type' })}</span>
 						</div>
 					{/if}
 				{/each}
 
 				{#if !textContent && blobContent.length === 0}
-					<div class="py-4 text-center text-sm text-muted-foreground">No content available</div>
+					<div class="py-4 text-center text-sm text-muted-foreground">{m.mcp_resource_no_content()}</div>
 				{/if}
 			{/if}
 		</div>

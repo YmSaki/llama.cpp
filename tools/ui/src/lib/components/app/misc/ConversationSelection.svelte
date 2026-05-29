@@ -4,6 +4,7 @@
 	import SearchInput from '$lib/components/app/forms/SearchInput.svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import { SvelteSet } from 'svelte/reactivity';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		conversations: DatabaseConversation[];
@@ -110,13 +111,13 @@
 </script>
 
 <div class="space-y-4">
-	<SearchInput bind:value={searchQuery} placeholder="Search conversations..." />
+	<SearchInput bind:value={searchQuery} placeholder={m.sidebar_search_placeholder()} />
 
 	<div class="flex items-center justify-between text-sm text-muted-foreground">
 		<span>
-			{selectedIds.size} of {conversations.length} selected
+			{m.conversation_selection_selected({ selected: selectedIds.size, total: conversations.length })}
 			{#if searchQuery}
-				({filteredConversations.length} shown)
+				{m.conversation_selection_shown({ shown: filteredConversations.length })}
 			{/if}
 		</span>
 	</div>
@@ -134,9 +135,9 @@
 							/>
 						</th>
 
-						<th class="p-3 text-left text-sm font-medium">Conversation Name</th>
+						<th class="p-3 text-left text-sm font-medium">{m.conversation_selection_name_header()}</th>
 
-						<th class="w-32 p-3 text-left text-sm font-medium">Messages</th>
+						<th class="w-32 p-3 text-left text-sm font-medium">{m.conversation_selection_messages_header()}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -144,9 +145,9 @@
 						<tr>
 							<td colspan="3" class="p-8 text-center text-sm text-muted-foreground">
 								{#if searchQuery}
-									No conversations found matching "{searchQuery}"
+									{m.conversation_selection_no_results({ query: searchQuery })}
 								{:else}
-									No conversations available
+									{m.conversation_selection_no_conversations()}
 								{/if}
 							</td>
 						</tr>
@@ -168,8 +169,8 @@
 								</td>
 
 								<td class="p-3 text-sm">
-									<div class="max-w-[17rem] truncate" title={conv.name || 'Untitled conversation'}>
-										{conv.name || 'Untitled conversation'}
+									<div class="max-w-[17rem] truncate" title={conv.name || m.conversation_selection_untitled()}>
+										{conv.name || m.conversation_selection_untitled()}
 									</div>
 								</td>
 
@@ -185,10 +186,10 @@
 	</div>
 
 	<div class="flex justify-end gap-2">
-		<Button variant="outline" onclick={handleCancel}>Cancel</Button>
+		<Button variant="outline" onclick={handleCancel}>{m.import_export_delete_all_dialog_cancel()}</Button>
 
 		<Button onclick={handleConfirm} disabled={selectedIds.size === 0}>
-			{mode === 'export' ? 'Export' : 'Import'} ({selectedIds.size})
+			{mode === 'export' ? m.conversation_selection_export({ count: selectedIds.size }) : m.conversation_selection_import({ count: selectedIds.size })}
 		</Button>
 	</div>
 </div>

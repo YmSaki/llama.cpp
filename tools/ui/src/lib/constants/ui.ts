@@ -1,3 +1,4 @@
+import { m } from '$lib/paraglide/messages.js';
 import { Settings, Search, SquarePen } from '@lucide/svelte';
 import McpLogo from '$lib/components/app/mcp/McpLogo.svelte';
 import type { Component } from 'svelte';
@@ -12,7 +13,7 @@ export const ICON_STRIP_TRANSITION_DELAY_MULTIPLIER = 50;
 
 export interface DesktopIconStripItem {
 	icon: Component;
-	tooltip: string;
+	tooltip: () => string;
 	route?: string;
 	activeRouteId?: string;
 	activeRoutePrefix?: string;
@@ -20,17 +21,17 @@ export interface DesktopIconStripItem {
 }
 
 export const SIDEBAR_ACTIONS_ITEMS: DesktopIconStripItem[] = [
-	{ icon: SquarePen, tooltip: 'New chat', route: ROUTES.NEW_CHAT, keys: ['shift', 'cmd', 'o'] },
-	{ icon: Search, tooltip: 'Search', keys: ['cmd', 'k'] },
+	{ icon: SquarePen, tooltip: () => m.sidebar_new_chat(), route: ROUTES.NEW_CHAT, keys: ['shift', 'cmd', 'o'] },
+	{ icon: Search, tooltip: () => m.sidebar_search(), keys: ['cmd', 'k'] },
 	{
 		icon: McpLogo,
-		tooltip: 'MCP Servers',
+		tooltip: () => m.sidebar_mcp_servers(),
 		route: ROUTES.MCP_SERVERS,
 		activeRouteId: '/mcp-servers'
 	},
 	{
 		icon: Settings,
-		tooltip: 'Settings',
+		tooltip: () => m.sidebar_settings(),
 		route: ROUTES.SETTINGS,
 		activeRoutePrefix: '/settings'
 	}

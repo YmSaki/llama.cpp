@@ -5,6 +5,7 @@
 	import { ModelsSelectorDropdown, ModelsSelectorSheet } from '$lib/components/app';
 	import { isMobile } from '$lib/stores/viewport.svelte';
 	import { activeMessages } from '$lib/stores/conversations.svelte';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		disabled?: boolean;
@@ -145,9 +146,9 @@
 
 	$effect(() => {
 		if (!hasModelSelected) {
-			submitTooltip = 'Please select a model first';
+			submitTooltip = m.chat_model_please_select();
 		} else if (!isSelectedModelInCache) {
-			submitTooltip = 'Selected model is not available, please select another';
+			submitTooltip = m.chat_model_not_available();
 		} else {
 			submitTooltip = '';
 		}

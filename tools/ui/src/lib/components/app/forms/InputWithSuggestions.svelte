@@ -2,6 +2,7 @@
 	import { fly } from 'svelte/transition';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		name: string;
@@ -53,7 +54,7 @@
 		onkeydown={onKeydown}
 		onblur={onBlur}
 		onfocus={onFocus}
-		placeholder="Enter {name}"
+		placeholder={m.form_input_enter_name({ name })}
 		autocomplete="off"
 	/>
 

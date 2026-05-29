@@ -49,7 +49,7 @@
 		: 'opacity-100'}"
 >
 	<div class="mt-12 flex flex-col items-center gap-1">
-		{#each SIDEBAR_ACTIONS_ITEMS as item, i (item.tooltip)}
+		{#each SIDEBAR_ACTIONS_ITEMS as item, i (item.tooltip())}
 			{@const onclick = item.route ? () => goto(item.route!) : onSearchClick}
 			{@const isActive = item.activeRouteId
 				? page.route.id === item.activeRouteId
@@ -68,7 +68,7 @@
 				>
 					<ActionIcon
 						icon={item.icon}
-						tooltip={item.tooltip}
+						tooltip={item.tooltip()}
 						tooltipSide={TooltipSide.RIGHT}
 						size="lg"
 						iconSize="h-4 w-4"

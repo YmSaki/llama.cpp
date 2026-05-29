@@ -3,6 +3,7 @@
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import type { MCPConnectionLog } from '$lib/types';
 	import { formatTime, getMcpLogLevelIcon, getMcpLogLevelClass } from '$lib/utils';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		logs: MCPConnectionLog[];
@@ -40,7 +41,7 @@
 					<ChevronRight class="h-3.5 w-3.5" />
 				{/if}
 
-				<span>Connection Log ({logs.length})</span>
+				<span>{m.mcp_connection_log({ count: logs.length })}</span>
 
 				{#if connectionTimeMs !== undefined}
 					<span class="ml-1">· Connected in {connectionTimeMs}ms</span>

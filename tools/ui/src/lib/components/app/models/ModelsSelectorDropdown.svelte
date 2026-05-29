@@ -2,6 +2,7 @@
 	import { ChevronDown, Loader2, Package } from '@lucide/svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { m } from '$lib/paraglide/messages.js';
 	import { KeyboardKey } from '$lib/enums';
 	import { useModelsSelector } from '$lib/hooks/use-models-selector.svelte';
 	import {
@@ -95,7 +96,7 @@
 		<div class="flex items-center gap-2 text-xs text-muted-foreground">
 			<Loader2 class="h-3.5 w-3.5 animate-spin" />
 
-			Loading models…
+			{m.models_loading()}
 		</div>
 	{:else if ms.options.length === 0 && ms.isRouter}
 		{#if currentModel}
@@ -111,7 +112,7 @@
 				<ModelId modelId={currentModel} class="min-w-0" hideQuantization />
 			</span>
 		{:else}
-			<p class="text-xs text-muted-foreground">No models available.</p>
+			<p class="text-xs text-muted-foreground">{m.models_no_models_available()}</p>
 		{/if}
 	{:else}
 		{@const selectedOption = ms.getDisplayOption()}
@@ -154,7 +155,7 @@
 							</Tooltip.Content>
 						</Tooltip.Root>
 					{:else}
-						<span class="min-w-0 font-medium">Select model</span>
+						<span class="min-w-0 font-medium">{m.models_select()}</span>
 					{/if}
 
 					{#if ms.updating || ms.isLoadingModel}
@@ -171,9 +172,9 @@
 					<DropdownMenuSearchable
 						searchValue={ms.searchTerm}
 						onSearchChange={(v) => ms.setSearchTerm(v)}
-						placeholder="Search models..."
+						placeholder={m.models_search_placeholder()}
 						onSearchKeyDown={handleSearchKeyDown}
-						emptyMessage="No models found."
+						emptyMessage={m.models_no_models_found()}
 						isEmpty={ms.filteredOptions.length === 0 && ms.isCurrentModelInCache}
 					>
 						<div class="models-list">
@@ -189,12 +190,12 @@
 								>
 									<ModelId modelId={currentModel} class="flex-1" hideQuantization />
 
-									<span class="ml-2 text-xs whitespace-nowrap opacity-70">(not available)</span>
+									<span class="ml-2 text-xs whitespace-nowrap opacity-70">{m.models_not_available()}</span>
 								</button>
 							{/if}
 
 							{#if ms.filteredOptions.length === 0}
-								<p class="px-4 py-3 text-sm text-muted-foreground">No models found.</p>
+								<p class="px-4 py-3 text-sm text-muted-foreground">{m.models_no_models_found()}</p>
 							{/if}
 
 							{#snippet modelOption(item: ModelItem, hideOrgName: boolean)}

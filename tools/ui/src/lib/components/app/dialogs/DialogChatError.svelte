@@ -2,6 +2,7 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { AlertTriangle, TimerOff } from '@lucide/svelte';
 	import { ErrorDialogType } from '$lib/enums';
+	import { m } from '$lib/paraglide/messages.js';
 
 	interface Props {
 		open: boolean;
@@ -14,11 +15,11 @@
 	let { open = $bindable(), type, message, contextInfo, onOpenChange }: Props = $props();
 
 	const isTimeout = $derived(type === ErrorDialogType.TIMEOUT);
-	const title = $derived(isTimeout ? 'TCP Timeout' : 'Server Error');
+	const title = $derived(isTimeout ? m.dialog_error_timeout_title() : m.dialog_error_server_error_title());
 	const description = $derived(
 		isTimeout
-			? 'The request did not receive a response from the server before timing out.'
-			: 'The server responded with an error message. Review the details below.'
+			? m.dialog_error_timeout_description()
+			: m.dialog_error_server_description()
 	);
 	const iconClass = $derived(isTimeout ? 'text-destructive' : 'text-amber-500');
 	const badgeClass = $derived(
@@ -57,14 +58,14 @@
 			{#if contextInfo}
 				<div class="mt-2 space-y-1 text-xs opacity-80">
 					<p>
-						<span class="font-medium">Prompt tokens:</span>
+						<span class="font-medium">{m.dialog_error_prompt_tokens()}</span>
 
 						{contextInfo.n_prompt_tokens.toLocaleString()}
 					</p>
 
 					{#if contextInfo.n_ctx}
 						<p>
-							<span class="font-medium">Context size:</span>
+							<span class="font-medium">{m.dialog_error_context_size()}</span>
 
 							{contextInfo.n_ctx.toLocaleString()}
 						</p>
@@ -74,7 +75,7 @@
 		</div>
 
 		<AlertDialog.Footer>
-			<AlertDialog.Action onclick={() => handleOpenChange(false)}>Close</AlertDialog.Action>
+			<AlertDialog.Action onclick={() => handleOpenChange(false)}>{m.dialog_error_close()}</AlertDialog.Action>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>

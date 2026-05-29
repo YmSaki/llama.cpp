@@ -2,6 +2,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { conversationsStore } from '$lib/stores/conversations.svelte';
 	import { mcpStore } from '$lib/stores/mcp.svelte';
+	import { m } from '$lib/paraglide/messages.js';
 	import { HealthCheckStatus } from '$lib/enums';
 	import { MAX_DISPLAYED_MCP_AVATARS } from '$lib/constants';
 	import McpLogo from './McpLogo.svelte';
@@ -54,7 +55,7 @@
 			</Tooltip.Trigger>
 
 			<Tooltip.Content>
-				<p>MCP Servers</p>
+				<p>{m.mcp_servers_label()}</p>
 			</Tooltip.Content>
 		</Tooltip.Root>
 	</button>

@@ -2,6 +2,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { InputWithSuggestions } from '$lib/components/app';
 	import { KeyboardKey } from '$lib/enums';
+	import { m } from '$lib/paraglide/messages.js';
 	import { mcpStore } from '$lib/stores/mcp.svelte';
 	import { MIN_AUTOCOMPLETE_INPUT_LENGTH } from '$lib/constants';
 	import type { MCPResourceTemplateInfo } from '$lib/types';
@@ -164,8 +165,8 @@
 	{/if}
 
 	<div class="flex justify-end gap-2 pt-1">
-		<Button type="button" size="sm" variant="secondary" onclick={onCancel}>Cancel</Button>
+		<Button type="button" size="sm" variant="secondary" onclick={onCancel}>{m.common_cancel()}</Button>
 
-		<Button size="sm" type="submit" disabled={!isComplete}>Read Resource</Button>
+		<Button size="sm" type="submit" disabled={!isComplete}>{m.mcp_resource_read()}</Button>
 	</div>
 </form>

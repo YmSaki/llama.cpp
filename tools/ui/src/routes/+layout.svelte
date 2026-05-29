@@ -30,6 +30,7 @@
 	import { useSettingsNavigation } from '$lib/hooks/use-settings-navigation.svelte';
 	import { conversations } from '$lib/stores/conversations.svelte';
 	import { isMobile } from '$lib/stores/viewport.svelte';
+	import { setLocale } from '$lib/i18n.svelte.js';
 
 	let { children } = $props();
 	let alwaysShowSidebarOnDesktop = $derived(config().alwaysShowSidebarOnDesktop);
@@ -210,6 +211,15 @@
 	// Monitor API key changes and redirect to error page if removed or changed when required
 	$effect(() => {
 		checkApiKey();
+	});
+
+	// Sync language setting with Paraglide locale and update html lang attribute
+	$effect(() => {
+		const lang = config().language as string;
+		if (lang) {
+			setLocale(lang as Parameters<typeof setLocale>[0]);
+			if (browser) document.documentElement.lang = lang;
+		}
 	});
 
 	// Set up title update confirmation callback
